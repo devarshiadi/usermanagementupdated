@@ -24,7 +24,7 @@ class UserDetails(Base):
     tenth_percentage = Column(Float)
     twelfth_percentage = Column(Float)
     current_aggregate_percentage = Column(Float, nullable=True) # New field
-    graduation_percentage = Column(Float)
+    graduation_percentage = Column(Float, nullable=True)
     specialization = Column(String)
     placement_status = Column(String, nullable=True)
     company_name = Column(String, nullable=True)

@@ -13,15 +13,20 @@
                 <div class="col-md-6"><strong>Date of Birth:</strong> {{ details.dob }}</div>
                 <div class="col-md-6"><strong>Gender:</strong> {{ details.gender }}</div>
                 <div class="col-md-6"><strong>Current Semester:</strong> {{ details.current_semester }}</div>
-                {% if details.current_semester != 'Graduated' and details.current_aggregate_percentage is not none %}
-                <div class="col-md-6"><strong>Current Aggregate %:</strong> {{ "%.2f"|format(details.current_aggregate_percentage) }} %</div>
+                
+                {% if details.current_aggregate_percentage is not none %}
+                <div class="col-md-6"><strong>Current Aggregate % (Last Recorded):</strong> {{ "%.2f"|format(details.current_aggregate_percentage) }} %</div>
                 {% endif %}
-                <div class="col-md-6"><strong>10th </strong> {{ details.tenth_percentage }} %</div>
-                <div class="col-md-6"><strong>12th </strong> {{ details.twelfth_percentage }} %</div>
-                {% if details.current_semester == 'Graduated' %}
-                <div class="col-md-6"><strong>Graduation %:</strong> {{ details.graduation_percentage if details.graduation_percentage is not none else 'N/A' }} %</div>
+                
+                <div class="col-md-6"><strong>10th %:</strong> {{ "%.2f"|format(details.tenth_percentage) if details.tenth_percentage is not none else 'N/A' }} %</div>
+                <div class="col-md-6"><strong>12th %:</strong> {{ "%.2f"|format(details.twelfth_percentage) if details.twelfth_percentage is not none else 'N/A' }} %</div>
+                
+                {% if details.graduation_percentage is not none %}
+                <div class="col-md-6"><strong>Graduation %:</strong> {{ "%.2f"|format(details.graduation_percentage) }} %</div>
                 {% endif %}
+                
                 <div class="col-md-6"><strong>Specialization:</strong> {{ details.specialization or 'N/A' }}</div>
+                
                 {% if details.current_semester == 'Graduated' %}
                 <div class="col-md-6"><strong>Placement Status:</strong> {{ details.placement_status or 'N/A' }}</div>
                     {% if details.placement_status == 'Placed' %}

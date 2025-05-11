@@ -134,15 +134,24 @@ def user_form_post(request: Request,
 
     # Conditional logic for percentages and placement
     if current_semester == "Graduated":
-        details.graduation_percentage = graduation_percentage
+        if graduation_percentage is not None:
+            details.graduation_percentage = graduation_percentage
+        # else: details.graduation_percentage remains unchanged if no new value submitted
+        
         details.placement_status = placement_status
         details.company_name = company_name if placement_status == "Placed" else None
-        details.current_aggregate_percentage = None # Nullify if graduated
+        # Do not nullify current_aggregate_percentage, preserve its history
+        # if current_aggregate_percentage is None and details.current_aggregate_percentage is not None:
+            # This means the field was hidden and submitted None, but we want to keep old value
+            # No action needed here, it will retain its old value if not explicitly set to None by form
     else: # Semesters 1-8
-        details.current_aggregate_percentage = current_aggregate_percentage
-        details.graduation_percentage = None # Nullify if not graduated
-        details.placement_status = None
-        details.company_name = None
+        if current_aggregate_percentage is not None:
+            details.current_aggregate_percentage = current_aggregate_percentage
+        # else: details.current_aggregate_percentage remains unchanged
+        
+        # Do not nullify graduation_percentage, preserve its history
+        details.placement_status = None # Placement info is only for graduated
+        details.company_name = None   # Company info is only for graduated
         
     db.commit()
     request.session["success"] = msg
@@ -333,15 +342,21 @@ def admin_edit_user_post(request: Request, user_id: int,
 
     # Conditional logic for percentages and placement
     if current_semester == "Graduated":
-        details.graduation_percentage = graduation_percentage
+        if graduation_percentage is not None:
+            details.graduation_percentage = graduation_percentage
+        # else: details.graduation_percentage remains unchanged if no new value submitted
+
         details.placement_status = placement_status
         details.company_name = company_name if placement_status == "Placed" else None
-        details.current_aggregate_percentage = None # Nullify if graduated
+        # Do not nullify current_aggregate_percentage, preserve its history
     else: # Semesters 1-8
-        details.current_aggregate_percentage = current_aggregate_percentage
-        details.graduation_percentage = None # Nullify if not graduated
-        details.placement_status = None
-        details.company_name = None
+        if current_aggregate_percentage is not None:
+            details.current_aggregate_percentage = current_aggregate_percentage
+        # else: details.current_aggregate_percentage remains unchanged
+        
+        # Do not nullify graduation_percentage, preserve its history
+        details.placement_status = None # Placement info is only for graduated
+        details.company_name = None   # Company info is only for graduated
 
     db.commit()
     request.session["success"] = msg

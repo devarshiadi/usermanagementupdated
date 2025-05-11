@@ -162,22 +162,26 @@
     // Hide all conditional fields initially
     currentAggPercentageDiv.style.display = 'none';
     currentAggPercentageInput.required = false;
-    currentAggPercentageInput.value = '';
+    // currentAggPercentageInput.value = ''; // Preserve value
     currentAggPercentageInput.disabled = true;
 
     gradPercentageDiv.style.display = 'none';
     gradPercentageInput.required = false;
-    gradPercentageInput.value = '';
+    // gradPercentageInput.value = ''; // Preserve value
     gradPercentageInput.disabled = true;
     
     placementStatusDiv.style.display = 'none';
     placementStatusSelect.required = false;
-    placementStatusSelect.value = '';
+    if (selectedSemester !== 'Graduated' || placementStatusSelect.value === '') { // Clear only if not relevant or empty
+        placementStatusSelect.value = '';
+    }
     placementStatusSelect.disabled = true;
 
     companyNameDiv.style.display = 'none';
     companyNameInput.required = false;
-    companyNameInput.value = '';
+    if (selectedSemester !== 'Graduated' || placementStatusSelect.value !== 'Placed' || companyNameInput.value === '') { // Clear only if not relevant or empty
+         companyNameInput.value = '';
+    }
     companyNameInput.disabled = true;
 
     if (selectedSemester === 'Graduated') {
@@ -203,7 +207,10 @@
     } else {
       companyNameDiv.style.display = 'none';
       companyNameInput.required = false;
-      companyNameInput.value = '';
+      // companyNameInput.value = ''; // Preserve value unless explicitly cleared by semester logic
+      if (selectedSemester !== 'Graduated' || placementStatusSelect.value !== 'Placed') {
+        companyNameInput.value = ''; // Clear if conditions for it being active are not met
+      }
       companyNameInput.disabled = true;
     }
   }
