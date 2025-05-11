@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% block title %}View User{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8" style="padding:0;">
+        <div class="card mb-4 admin-card" style="border-radius:1.5rem;">
+            <div class="card-header bg-info text-white rounded-top-4">User Details</div>
+            <div class="card-body row g-3">
+                <div class="col-md-6"><strong>Username:</strong> {{ user.username }}</div>
+                <div class="col-md-6"><strong>Name:</strong> {{ details.first_name }} {{ details.last_name }}</div>
+                <div class="col-md-6"><strong>Email:</strong> {{ details.email }}</div>
+                <div class="col-md-6"><strong>Mobile:</strong> {{ details.mobile }}</div>
+                <div class="col-md-6"><strong>Date of Birth:</strong> {{ details.dob }}</div>
+                <div class="col-md-6"><strong>Gender:</strong> {{ details.gender }}</div>
+                <div class="col-md-6"><strong>Current Semester:</strong> {{ details.current_semester }}</div>
+                {% if details.current_semester != 'Graduated' and details.current_aggregate_percentage is not none %}
+                <div class="col-md-6"><strong>Current Aggregate %:</strong> {{ "%.2f"|format(details.current_aggregate_percentage) }} %</div>
+                {% endif %}
+                <div class="col-md-6"><strong>10th </strong> {{ details.tenth_percentage }} %</div>
+                <div class="col-md-6"><strong>12th </strong> {{ details.twelfth_percentage }} %</div>
+                {% if details.current_semester == 'Graduated' %}
+                <div class="col-md-6"><strong>Graduation %:</strong> {{ details.graduation_percentage if details.graduation_percentage is not none else 'N/A' }} %</div>
+                {% endif %}
+                <div class="col-md-6"><strong>Specialization:</strong> {{ details.specialization or 'N/A' }}</div>
+                {% if details.current_semester == 'Graduated' %}
+                <div class="col-md-6"><strong>Placement Status:</strong> {{ details.placement_status or 'N/A' }}</div>
+                    {% if details.placement_status == 'Placed' %}
+                <div class="col-md-6"><strong>Company Name:</strong> {{ details.company_name or 'N/A' }}</div>
+                    {% endif %}
+                {% endif %}
+            </div>
+        </div>
+
+        {% if academic_remarks %}
+        <div class="card mb-4 admin-card" style="border-radius:1.5rem;">
+            <div class="card-header bg-secondary text-white rounded-top-4">Academic Performance Analysis</div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for remark in academic_remarks %}
+                    <li class="list-group-item">{{ remark }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        {% endif %}
+
+        <a href="/admin/dashboard" class="btn btn-secondary">Back to Dashboard</a>
+    </div>
+</div>
+{% endblock %}

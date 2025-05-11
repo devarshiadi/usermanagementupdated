@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+{% block title %}Signup{% endblock %}
+{% block content %}
+<div class="row justify-content-center align-items-center" style="min-height:70vh;">
+    <div class="col-md-4 col-12">
+        <h3 class="mb-3 text-center">Sign Up</h3>
+        <form method="post" action="/signup" novalidate class="needs-validation" style="background:transparent;">
+            <div class="mb-3">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" required autocomplete="username">
+            </div>
+            <div class="mb-3">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" required minlength="4" autocomplete="new-password">
+            </div>
+            <div class="mb-3">
+                <label for="confirm_password" class="form-label">Confirm Password</label>
+                <input type="password" class="form-control" id="confirm_password" name="confirm_password" required minlength="4" autocomplete="new-password">
+                <div class="invalid-feedback" id="confirm-feedback">Passwords do not match.</div>
+            </div>
+            <button type="submit" class="btn btn-success w-100" id="signup-btn" disabled>Sign Up</button>
+        </form>
+        <div class="mt-3 text-center">
+            <a href="/login">Already have an account? Login</a>
+        </div>
+    </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var forms = document.querySelectorAll('.needs-validation');
+  Array.prototype.slice.call(forms).forEach(function (form) {
+    var password = form.querySelector('#password');
+    var confirm = form.querySelector('#confirm_password');
+    var btn = form.querySelector('#signup-btn');
+    var feedback = form.querySelector('#confirm-feedback');
+    function checkMatch() {
+      if (password.value && confirm.value && password.value === confirm.value) {
+        confirm.classList.remove('is-invalid');
+        confirm.classList.add('is-valid');
+        feedback.style.display = 'none';
+        btn.disabled = false;
+      } else {
+        confirm.classList.remove('is-valid');
+        if (confirm.value) {
+          confirm.classList.add('is-invalid');
+          feedback.style.display = '';
+        } else {
+          confirm.classList.remove('is-invalid');
+          feedback.style.display = 'none';
+        }
+        btn.disabled = true;
+      }
+    }
+    password.addEventListener('input', checkMatch);
+    confirm.addEventListener('input', checkMatch);
+    form.addEventListener('submit', function (event) {
+      if (!form.checkValidity() || password.value !== confirm.value) {
+        event.preventDefault();
+        event.stopPropagation();
+        checkMatch();
+      }
+      form.classList.add('was-validated');
+    }, false);
+  });
+})();
+</script>
+{% endblock %}

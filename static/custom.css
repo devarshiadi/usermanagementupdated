@@ -1,0 +1,170 @@
+body {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Removed blob-bg and blob-bg2 background blobs */
+
+@keyframes blobMove {
+    0% { transform: scale(1) translateY(0) translateX(0); }
+    100% { transform: scale(1.2) translateY(40px) translateX(60px); }
+}
+@keyframes blobMove2 {
+    0% { transform: scale(1) translateY(0) translateX(0); }
+    100% { transform: scale(1.1) translateY(-30px) translateX(-50px); }
+}
+
+.card, .table, .form-control, .form-select, .btn {
+    border-radius: 1.5rem !important;
+}
+
+.card {
+    box-shadow: 0 4px 32px 0 rgba(80, 80, 160, 0.09);
+    border: none;
+    background: rgba(255,255,255,0.95);
+    backdrop-filter: blur(2px);
+    transition: box-shadow 0.2s;
+}
+.card:hover {
+    box-shadow: 0 8px 40px 0 rgba(80, 80, 160, 0.18);
+}
+
+.admin-card {
+    background: rgba(245, 245, 255, 0.97);
+    border: 2px solid #d1d8fc;
+    box-shadow: 0 4px 28px 0 rgba(81, 86, 255, 0.09);
+    border-radius: 1.8rem !important;
+    margin-bottom: 1.5rem;
+    overflow: hidden;
+}
+.admin-card .card-header {
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    background: linear-gradient(90deg, #5f72bd 0%, #9b23ea 100%) !important;
+    color: #fff !important;
+    border-radius: 1.8rem 1.8rem 0 0 !important;
+}
+
+.admin-navbar {
+    background: linear-gradient(90deg, #5f72bd 0%, #9b23ea 100%) !important;
+    box-shadow: 0 4px 24px 0 rgba(81, 86, 255, 0.09);
+    border-radius: 0 0 1.5rem 1.5rem;
+    margin-top: 0;
+    margin-bottom: 1.2rem;
+    padding-left: 1.2rem;
+    padding-right: 1.2rem;
+    backdrop-filter: blur(2px);
+    position: sticky;
+    top: 0;
+    z-index: 1050;
+}
+
+.btn-primary, .btn-success, .btn-info, .btn-warning, .btn-danger, .btn-secondary {
+    border-radius: 2rem;
+    font-weight: 600;
+    letter-spacing: 0.5px;
+    box-shadow: 0 2px 8px 0 rgba(80, 80, 160, 0.08);
+    transition: background 0.2s, box-shadow 0.2s;
+}
+
+.btn-primary:hover, .btn-success:hover, .btn-info:hover, .btn-warning:hover, .btn-danger:hover, .btn-secondary:hover {
+    filter: brightness(0.95);
+    box-shadow: 0 4px 16px 0 rgba(80, 80, 160, 0.12);
+}
+
+.form-control:focus, .form-select:focus {
+    border-color: #a18cd1;
+    box-shadow: 0 0 0 0.2rem rgba(161,140,209,.15);
+}
+
+input.form-control, select.form-select, textarea.form-control {
+    font-size: 1.1rem;
+    min-height: 2.8rem;
+    padding: 0.7rem 1.1rem;
+    border-radius: 1.5rem;
+    border: 1.5px solid #e0e0f2;
+    background: #fff !important;
+    box-shadow: 0 2px 8px 0 rgba(80, 80, 160, 0.04);
+    transition: border-color 0.2s, box-shadow 0.2s;
+    outline: none;
+    appearance: none;
+    color: #222;
+    z-index: 2;
+}
+input.form-control:focus, select.form-select:focus, textarea.form-control:focus {
+    border-color: #a18cd1;
+    box-shadow: 0 0 0 0.2rem rgba(161,140,209,.13);
+    background: #fff !important;
+    color: #222;
+}
+
+button.btn, input[type="submit"].btn {
+    border-radius: 2rem;
+    font-weight: 600;
+    font-size: 1.1rem;
+    min-height: 2.8rem;
+    padding: 0.7rem 1.1rem;
+    transition: background 0.2s, box-shadow 0.2s, filter 0.2s;
+    box-shadow: 0 2px 8px 0 rgba(80, 80, 160, 0.08);
+    outline: none;
+    border: none;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    background: linear-gradient(90deg, #5f72bd 0%, #9b23ea 100%) !important;
+    color: #fff !important;
+    position: relative;
+    z-index: 1;
+}
+button.btn:active, input[type="submit"].btn:active {
+    filter: brightness(0.97);
+    box-shadow: 0 1px 4px 0 rgba(80, 80, 160, 0.13);
+}
+button.btn:disabled, input[type="submit"].btn:disabled {
+    opacity: 0.65;
+    filter: grayscale(0.2);
+    cursor: not-allowed;
+    background: linear-gradient(90deg, #bcbcbc 0%, #d6d6d6 100%) !important;
+    color: #fff !important;
+}
+
+.alert {
+    border-radius: 1.5rem;
+    font-size: 1rem;
+}
+
+.navbar {
+}
+
+@media (max-width: 600px) {
+    .card, .navbar, .form-control, .form-select, .btn, .alert {
+        border-radius: 1.1rem !important;
+    }
+    .admin-card {
+        border-radius: 1.1rem !important;
+    }
+    .admin-card .card-header {
+        border-radius: 1.1rem 1.1rem 0 0 !important;
+    }
+    .admin-navbar {
+        border-radius: 0 0 1.1rem 1.1rem !important;
+        margin-top: 0;
+        margin-bottom: 0.5rem;
+        padding-left: 0.2rem;
+        padding-right: 0.2rem;
+    }
+    .col-md-8, .col-md-4 {
+        padding: 0 0.5rem;
+    }
+    input.form-control, select.form-select, textarea.form-control {
+        font-size: 1rem;
+        min-height: 2.6rem;
+        padding: 0.6rem 0.9rem;
+    }
+    button.btn, input[type="submit"].btn {
+        font-size: 1rem;
+        min-height: 2.6rem;
+        padding: 0.6rem 0.9rem;
+    }
+}

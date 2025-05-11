@@ -1,0 +1,223 @@
+{% extends 'base.html' %}
+{% block title %}Your Details{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8" style="padding:0;">
+        <form method="post" action="/user/form" novalidate class="needs-validation" style="background:transparent;">
+            <div class="card mb-4" style="border-radius:1.5rem;">
+                <div class="card-header bg-primary text-white">Personal Details</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">First Name</label>
+                        <input type="text" class="form-control" name="first_name" value="{{ details.first_name or '' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Last Name</label>
+                        <input type="text" class="form-control" name="last_name" value="{{ details.last_name or '' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Email</label>
+                        <input type="email" class="form-control" name="email" value="{{ details.email or '' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Mobile No</label>
+                        <input type="tel" class="form-control" name="mobile" value="{{ details.mobile or '' }}" required pattern="[0-9]{10}" title="Mobile number must be 10 digits">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Date of Birth</label>
+                        <input type="date" class="form-control" name="dob" value="{{ details.dob.strftime('%Y-%m-%d') if details.dob else '' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Gender</label>
+                        <select class="form-select" name="gender" required>
+                            <option value="">Select</option>
+                            <option value="Male" {% if details.gender=='Male' %}selected{% endif %}>Male</option>
+                            <option value="Female" {% if details.gender=='Female' %}selected{% endif %}>Female</option>
+                            <option value="Other" {% if details.gender=='Other' %}selected{% endif %}>Other</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class="card mb-4" style="border-radius:1.5rem;">
+                <div class="card-header bg-success text-white">Educational Information</div>
+                <div class="card-body row g-3">
+                    <div class="col-md-6">
+                        <label class="form-label">Current Semester</label>
+                        <select class="form-select" name="current_semester" id="current_semester" required>
+                            <option value="">Select Semester</option>
+                            {% for option_val in semester_options %}
+                            <option value="{{ option_val }}" {% if details.current_semester == option_val %}selected{% endif %}>{{ option_val }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Specialization</label>
+                        <select class="form-select" name="specialization" id="specialization" required>
+                            <option value="">Select Specialization</option>
+                            {% for option_val in specialization_options %}
+                            <option value="{{ option_val }}" {% if details.specialization == option_val %}selected{% endif %}>{{ option_val }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-md-6 conditional-pursuing" id="current_agg_percentage_div" style="display: none;">
+                        <label class="form-label">Current Aggregate Percentage</label>
+                        <input type="number" step="0.01" min="0" max="100" class="form-control" name="current_aggregate_percentage" value="{{ details.current_aggregate_percentage or '' }}">
+                    </div>
+                    <div class="col-md-6 conditional-grad" id="grad_percentage_div" style="display: none;">
+                        <label class="form-label">Graduation Percentage</label>
+                        <input type="number" step="0.01" min="0" max="100" class="form-control" name="graduation_percentage" value="{{ details.graduation_percentage or '' }}">
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Class 10th Percentage</label>
+                        <input type="number" step="0.01" min="0" max="100" class="form-control" name="tenth_percentage" value="{{ details.tenth_percentage or '' }}" required>
+                    </div>
+                    <div class="col-md-6">
+                        <label class="form-label">Class 12th Percentage</label>
+                        <input type="number" step="0.01" min="0" max="100" class="form-control" name="twelfth_percentage" value="{{ details.twelfth_percentage or '' }}" required>
+                    </div>
+                    <div class="col-md-6 conditional-grad" id="placement_status_div" style="display: none;">
+                        <label class="form-label">Placement Status</label>
+                        <select class="form-select" name="placement_status" id="placement_status">
+                            <option value="">Select Status</option>
+                            <option value="Placed" {% if details.placement_status == 'Placed' %}selected{% endif %}>Placed</option>
+                            <option value="Not Placed" {% if details.placement_status == 'Not Placed' %}selected{% endif %}>Not Placed</option>
+                        </select>
+                    </div>
+                    <div class="col-md-6 conditional-placed" id="company_name_div" style="display: none;">
+                        <label class="form-label">Company Name</label>
+                        <input type="text" class="form-control" name="company_name" value="{{ details.company_name or '' }}">
+                    </div>
+                </div>
+            </div>
+            <button type="submit" class="btn btn-primary w-100">{{ 'Update' if details and details.first_name else 'Submit' }}</button>
+        </form>
+    </div>
+</div>
+<script>
+(function () {
+  'use strict';
+  var forms = document.querySelectorAll('.needs-validation');
+  Array.prototype.slice.call(forms).forEach(function (form) {
+    form.addEventListener('submit', function (event) {
+      // Standard Bootstrap validation
+      if (!form.checkValidity()) {
+        event.preventDefault();
+        event.stopPropagation();
+      }
+      
+      // Custom conditional validation
+      const semesterSelect = form.querySelector('#current_semester');
+      const currentAggPercentageInput = form.querySelector('input[name="current_aggregate_percentage"]');
+      const gradPercentageInput = form.querySelector('input[name="graduation_percentage"]');
+      const placementStatusSelect = form.querySelector('#placement_status');
+      const companyNameInput = form.querySelector('input[name="company_name"]');
+
+      if (semesterSelect) {
+        if (semesterSelect.value === 'Graduated') {
+          if (!gradPercentageInput.value) {
+            gradPercentageInput.setCustomValidity('Graduation Percentage is required when Graduated.');
+            gradPercentageInput.classList.add('is-invalid');
+            event.preventDefault(); event.stopPropagation();
+          } else { gradPercentageInput.setCustomValidity(''); gradPercentageInput.classList.remove('is-invalid'); }
+          
+          if (!placementStatusSelect.value) {
+            placementStatusSelect.setCustomValidity('Placement status is required when Graduated.');
+            placementStatusSelect.classList.add('is-invalid');
+            event.preventDefault(); event.stopPropagation();
+          } else { placementStatusSelect.setCustomValidity(''); placementStatusSelect.classList.remove('is-invalid'); }
+
+          if (placementStatusSelect.value === 'Placed' && !companyNameInput.value) {
+            companyNameInput.setCustomValidity('Company name is required when Placed.');
+            companyNameInput.classList.add('is-invalid');
+            event.preventDefault(); event.stopPropagation();
+          } else { companyNameInput.setCustomValidity(''); companyNameInput.classList.remove('is-invalid'); }
+
+        } else if (semesterSelect.value && semesterSelect.value !== '') { // Pursuing a semester
+          if (!currentAggPercentageInput.value) {
+            currentAggPercentageInput.setCustomValidity('Current Aggregate Percentage is required for ongoing semesters.');
+            currentAggPercentageInput.classList.add('is-invalid');
+            event.preventDefault(); event.stopPropagation();
+          } else { currentAggPercentageInput.setCustomValidity(''); currentAggPercentageInput.classList.remove('is-invalid'); }
+        }
+      }
+      form.classList.add('was-validated');
+    }, false);
+  });
+
+  const semesterSelect = document.getElementById('current_semester');
+  const currentAggPercentageDiv = document.getElementById('current_agg_percentage_div');
+  const gradPercentageDiv = document.getElementById('grad_percentage_div');
+  const specializationDiv = document.getElementById('specialization_div'); // Specialization is always visible now
+  const placementStatusDiv = document.getElementById('placement_status_div');
+  const companyNameDiv = document.getElementById('company_name_div');
+
+  const currentAggPercentageInput = currentAggPercentageDiv.querySelector('input');
+  const gradPercentageInput = gradPercentageDiv.querySelector('input');
+  const placementStatusSelect = placementStatusDiv.querySelector('select');
+  const companyNameInput = companyNameDiv.querySelector('input');
+
+  function toggleFieldsBasedOnSemester() {
+    const selectedSemester = semesterSelect.value;
+
+    // Hide all conditional fields initially
+    currentAggPercentageDiv.style.display = 'none';
+    currentAggPercentageInput.required = false;
+    currentAggPercentageInput.value = '';
+    currentAggPercentageInput.disabled = true;
+
+    gradPercentageDiv.style.display = 'none';
+    gradPercentageInput.required = false;
+    gradPercentageInput.value = '';
+    gradPercentageInput.disabled = true;
+    
+    placementStatusDiv.style.display = 'none';
+    placementStatusSelect.required = false;
+    placementStatusSelect.value = '';
+    placementStatusSelect.disabled = true;
+
+    companyNameDiv.style.display = 'none';
+    companyNameInput.required = false;
+    companyNameInput.value = '';
+    companyNameInput.disabled = true;
+
+    if (selectedSemester === 'Graduated') {
+      gradPercentageDiv.style.display = 'block';
+      gradPercentageInput.required = true;
+      gradPercentageInput.disabled = false;
+      placementStatusDiv.style.display = 'block';
+      placementStatusSelect.required = true;
+      placementStatusSelect.disabled = false;
+      toggleCompanyField(); // Handle company field based on placement status
+    } else if (selectedSemester && selectedSemester !== '') { // Any semester from 1st to 8th
+      currentAggPercentageDiv.style.display = 'block';
+      currentAggPercentageInput.required = true;
+      currentAggPercentageInput.disabled = false;
+    }
+  }
+
+  function toggleCompanyField() {
+    if (semesterSelect.value === 'Graduated' && placementStatusSelect.value === 'Placed') {
+      companyNameDiv.style.display = 'block';
+      companyNameInput.required = true;
+      companyNameInput.disabled = false;
+    } else {
+      companyNameDiv.style.display = 'none';
+      companyNameInput.required = false;
+      companyNameInput.value = '';
+      companyNameInput.disabled = true;
+    }
+  }
+
+  if (semesterSelect) {
+    semesterSelect.addEventListener('change', toggleFieldsBasedOnSemester);
+    toggleFieldsBasedOnSemester(); // Initial check
+  }
+  if (placementStatusSelect) {
+    placementStatusSelect.addEventListener('change', toggleCompanyField);
+     if(semesterSelect.value === 'Graduated') { // Initial check for company field
+        toggleCompanyField();
+    }
+  }
+})();
+</script>
+{% endblock %}
